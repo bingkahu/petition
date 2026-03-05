@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petition: Create a Larger Partition (3 XL+)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Petition for a Separate, Larger Partition</h1>
+            <p>Add your voice to the movement. Sign below to show your support.</p>
+        </header>
+
+        <main>
+            <section class="form-section" id="form-container">
+                <form id="petition-form">
+                    <div class="input-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="input-group">
+                        <label for="reason">Why are you signing? (Optional)</label>
+                        <textarea id="reason" rows="3" placeholder="I support this because..."></textarea>
+                    </div>
+                    <button type="submit" id="submit-btn">Sign the Petition</button>
+                </form>
+            </section>
+
+            <section class="success-message hidden" id="already-signed-msg">
+                <h2>Thank you for signing! 🎉</h2>
+                <p>Your device has been recorded. You cannot sign twice.</p>
+            </section>
+
+            <section class="signatures-section">
+                <h2>Recent Signatures (<span id="sig-count">0</span>)</h2>
+                <div id="signature-list" class="signature-list">
+                    </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
