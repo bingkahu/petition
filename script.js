@@ -1,72 +1,63 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("petition-form");
-    const formContainer = document.getElementById("form-container");
-    const successMsg = document.getElementById("already-signed-msg");
-    const signatureList = document.getElementById("signature-list");
-    const sigCountSpan = document.getElementById("sig-count");
+// 1. DATABASE CONFIG (Get these from Supabase)
+const SB_URL = 'https://jzngqqxjpyfopbwcvtn.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6bmdxcXF4anB5Zm9wYndjdnRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MjQwNDMsImV4cCI6MjA4ODMwMDA0M30.7aq_y_WR62veiHZJJgjBbDeSfelb7C84O7xKsrKR5Sg';
+const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
-    // We will use this array to mock a database for now
-    let signatures = [
-        { name: "Jane Doe", reason: "This is crucial for our future." },
-        { name: "John Smith", reason: "Fully support this initiative." }
-    ];
+const form = document.getElementById('petition-form');
+const sigList = document.getElementById('signature-list');
+const totalCounter = document.getElementById('total-count');
 
-    // Check if the device has already signed using LocalStorage
-    const hasSigned = localStorage.getItem("hasSignedPetition");
+// 2. CHECK LOCAL STORAGE (Prevent double signing)
+if (localStorage.getItem('petition_signed')) {
+    form.classList.add('hidden');
+    document.getElementById('success-area').classList.remove('hidden');
+}
 
-    if (hasSigned) {
-        // Hide form, show success message
-        formContainer.classList.add("hidden");
-        successMsg.classList.remove("hidden");
+// 3. LOAD DATA FROM CLOUD
+async function fetchSignatures() {
+    const { data, error } = await _supabase
+        .from('petition_signs')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        sigList.innerHTML = "Error connecting to cloud.";
+        return;
     }
 
-    // Render the initial mock signatures
-    renderSignatures();
+    totalCounter.innerText = data.length;
+    sigList.innerHTML = data.map(s => `
+        <div class="sig-item">
+            <strong>${s.name}</strong>
+            ${s.comment ? `<p>"${s.comment}"</p>` : ''}
+        </div>
+    `).join('');
+}
 
-    // Handle form submission
-    form.addEventListener("submit", (e) => {
-        e.preventDefault(); // Prevent page reload
+// 4. SAVE NEW SIGNATURE
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerText = "Signing...";
 
-        const nameInput = document.getElementById("name").value.trim();
-        const reasonInput = document.getElementById("reason").value.trim();
+    const name = document.getElementById('user-name').value;
+    const comment = document.getElementById('user-comment').value;
 
-        if (nameInput) {
-            // 1. Add to our local list
-            signatures.unshift({ name: nameInput, reason: reasonInput });
-            
-            // 2. Mark this device as having signed
-            localStorage.setItem("hasSignedPetition", "true");
-            
-            // 3. Update the UI
-            formContainer.classList.add("hidden");
-            successMsg.classList.remove("hidden");
-            renderSignatures();
-        }
-    });
+    const { error } = await _supabase
+        .from('petition_signs')
+        .insert([{ name, comment }]);
 
-    // Function to draw the signatures to the screen
-    function renderSignatures() {
-        signatureList.innerHTML = ""; // Clear current list
-        sigCountSpan.innerText = signatures.length;
-
-        signatures.forEach(sig => {
-            const card = document.createElement("div");
-            card.classList.add("signature-card");
-            
-            const nameEl = document.createElement("div");
-            nameEl.classList.add("signature-name");
-            nameEl.innerText = sig.name;
-            
-            card.appendChild(nameEl);
-
-            if (sig.reason) {
-                const reasonEl = document.createElement("div");
-                reasonEl.classList.add("signature-reason");
-                reasonEl.innerText = `"${sig.reason}"`;
-                card.appendChild(reasonEl);
-            }
-
-            signatureList.appendChild(card);
-        });
+    if (!error) {
+        localStorage.setItem('petition_signed', 'true');
+        form.classList.add('hidden');
+        document.getElementById('success-area').classList.remove('hidden');
+        fetchSignatures();
+    } else {
+        alert("Failed to save. Check your database setup.");
+        btn.disabled = false;
+        btn.innerText = "Add My Signature";
     }
 });
+
+fetchSignatures();
