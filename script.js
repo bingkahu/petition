@@ -1,5 +1,5 @@
 // 1. DATABASE CONFIG (Get these from Supabase)
-const SB_URL = 'https://jzngqqxjpyfopbwcvtn.supabase.co';
+const SB_URL = 'https://jzngqqqxjpyfopbwcvtn.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6bmdxcXF4anB5Zm9wYndjdnRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MjQwNDMsImV4cCI6MjA4ODMwMDA0M30.7aq_y_WR62veiHZJJgjBbDeSfelb7C84O7xKsrKR5Sg';
 const _supabase = supabase.createClient(SB_URL, SB_KEY);
 
