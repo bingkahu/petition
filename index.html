@@ -3,48 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petition | Large Partition Initiative</title>
+    <title>Global Petition | Large Partition</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="app-container">
-        <div class="petition-card">
+
+    <div class="main-container">
+        <div class="card">
             <header>
-                <div class="badge">Active Petition</div>
-                <h1>Create a Separate, Very Large Partition</h1>
-                <p class="description">We are demanding a dedicated, partition for 3 XL+.</p>
+                <span class="live-indicator">● LIVE PETITION</span>
+                <h1>Demand a Separate, Very Large Partition</h1>
+                <p>XL 3 +. Sign to make it happen.</p>
+                
+                <div class="counter-box">
+                    <span id="total-count">0</span>
+                    <label>Signatures Collected</label>
+                </div>
             </header>
 
-            <div id="status-area">
+            <div id="interaction-zone">
                 <form id="petition-form">
-                    <div class="input-field">
-                        <input type="text" id="name" placeholder="Full Name" required>
-                    </div>
-                    <div class="input-field">
-                        <textarea id="reason" placeholder="Why is this partition necessary? (Optional)" rows="3"></textarea>
-                    </div>
-                    <button type="submit" id="submit-btn">Sign This Petition</button>
+                    <input type="text" id="user-name" placeholder="Your Full Name" required>
+                    <textarea id="user-comment" placeholder="Why do you support this? (Optional)" rows="3"></textarea>
+                    <button type="submit" id="submit-btn">Add My Signature</button>
                 </form>
 
-                <div id="success-msg" class="hidden">
-                    <div class="check-icon">✓</div>
-                    <h2>Signature Recorded!</h2>
-                    <p>Your support for the large partition has been saved globally.</p>
+                <div id="success-area" class="hidden">
+                    <div class="icon">✅</div>
+                    <h3>Signature Verified</h3>
+                    <p>You've successfully joined the movement.</p>
                 </div>
             </div>
 
-            <section class="signatures-list">
-                <div class="list-header">
-                    <h3>Recent Supporters</h3>
-                    <span id="sig-count">0 signatures</span>
-                </div>
-                <div id="signature-container">
-                    <div class="loader">Loading signatures...</div>
+            <section class="feed">
+                <h2>Recent Signatures</h2>
+                <div id="signature-list">
+                    <div class="loading">Connecting to database...</div>
                 </div>
             </section>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
